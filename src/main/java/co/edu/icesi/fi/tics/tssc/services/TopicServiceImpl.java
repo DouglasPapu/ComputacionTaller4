@@ -70,7 +70,7 @@ public class TopicServiceImpl implements TopicService {
 			throw new SpringException();
 
 		} else {
-		    topicDao.save(editado);
+		    topicDao.update(editado);
 		    return editado;
 
 		}
@@ -90,6 +90,7 @@ public class TopicServiceImpl implements TopicService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(TsscTopic del) {
 		topicDao.delete(del);
 	}

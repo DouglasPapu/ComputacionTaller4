@@ -46,6 +46,15 @@ public class TallerPersistenciaApplication {
 			user2.setSuperAdmin("admin");
 			adminService.save(user2);
 			
+			
+			TsscTopic topic1 = new TsscTopic();
+			topic1.setDefaultGroups(8);
+			topic1.setDefaultSprints(8);
+			topic1.setName("Hola");
+			topic1.setName("Ilian");
+			topicService.saveTopic(topic1);
+			
+			
 		};
 
 	}

@@ -90,6 +90,7 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(TsscStory del) {
 		storyDao.delete(del);
 	}

@@ -16,25 +16,28 @@ import co.edu.icesi.fi.tics.tssc.services.IGameDelegate;
 @RestController
 public class GameRestController implements IGameRestController{
 
-	private IGameDelegate gameService;
+	private IGameDelegate gameDelegate;
 
 	@Autowired
-	public GameRestController(IGameDelegate gameService) {
+	public GameRestController(IGameDelegate gameDelegate) {
 		// TODO Auto-generated constructor stub
-		this.gameService = gameService;
+		this.gameDelegate = gameDelegate;
 	}
 
 	@PostMapping("/api/games/")
-	public TsscGame saveGame(TsscGame nuevo) {
+	public TsscGame saveGame(TsscGame tsscGame) {
 
+		
+		System.out.println("ESTOY EN REST "+tsscGame.getName());
+		System.out.println("ESTOY EN REST "+tsscGame.getTsscTopic());
 		try {
-			if (nuevo.getTsscTopic() == null) {
+			if (tsscGame.getTsscTopic() == null) {
 
-				return gameService.saveGame(nuevo);
+				return gameDelegate.saveGame(tsscGame);
 
 			} else {
 
-				return gameService.saveGameWithTopic(nuevo, nuevo.getTsscTopic().getId());
+				return gameDelegate.saveGameWithTopic(tsscGame, tsscGame.getTsscTopic().getId());
 			}
 
 		} catch (GameException | CapacityException | SpringException e) {
@@ -50,7 +53,7 @@ public class GameRestController implements IGameRestController{
 	public TsscGame editGame(@PathVariable("id") long id) {
 
 		try {
-			return gameService.editGame(gameService.findById(id).get());
+			return gameDelegate.editGame(gameDelegate.findById(id).get());
 		} catch (GameException | CapacityException | SpringException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,18 +64,18 @@ public class GameRestController implements IGameRestController{
 
 	@GetMapping("/api/games/")
 	public Iterable<TsscGame> findAll() {
-		return gameService.findAll();
+		return gameDelegate.findAll();
 
 	}
 
 	@GetMapping("/api/games/{id}")
 	public TsscGame findById(@PathVariable("id") long id) {
-		return gameService.findById(id).get();
+		return gameDelegate.findById(id).get();
 	}
 
 	@DeleteMapping("/api/games/{id}")
 	public void deleteGame(@PathVariable("id") long id) {
-		gameService.delete(gameService.findById(id).get());
+		gameDelegate.delete(gameDelegate.findById(id).get());
 	}
 
 }

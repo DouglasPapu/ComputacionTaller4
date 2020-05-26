@@ -61,7 +61,7 @@ public class TopicController {
 			} else {
 
 				try {
-					System.out.println("EL TOPIC ES "+tsscTopic.getName());
+					//System.out.println("EL TOPIC ES "+tsscTopic.getName());
 					delegate.addTopic(tsscTopic);
 					
 				} catch (Exception e) {
@@ -74,7 +74,6 @@ public class TopicController {
 			}
 
 		} else {
-
 			model.addAttribute("topics", delegate.getTopics());
 			return "topic/index";
 		}
@@ -129,7 +128,7 @@ public class TopicController {
 
 		if (action != null && !action.equals("Cancelar")) {
 			try {
-				delegate.addTopic(tsscTopic);
+				delegate.editTopic(tsscTopic);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -145,6 +145,7 @@ public class GameServiceImpl implements IGameDelegate {
 	}
 
 	@Override
+	@Transactional
 	public void delete(TsscGame del) {
        gameDao.delete(del);
 	}

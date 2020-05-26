@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import co.icesi.fi.tics.tssc.validations.ValidationTopic;
 
@@ -56,6 +57,7 @@ public class TsscTopic implements Serializable {
 	
 	@OneToMany
 	@JoinColumn(name = "TSSC_TIMECONTROL_ID")
+	@JsonIgnore
 	private List<TsscTimecontrol> tsscTimecontrol;
 
 	public TsscTopic() {
@@ -116,11 +118,12 @@ public class TsscTopic implements Serializable {
 	public void setTsscStories(List<TsscStory> tsscStories) {
 		this.tsscStories = tsscStories;
 	}
-	
+	@JsonIgnore
 	public List<TsscTimecontrol> getTssTimecontrol() {
 		return this.tsscTimecontrol;
 	}
 
+	@JsonIgnore
 	public void setTsscTimecontrol(List<TsscTimecontrol> tsscTimecontrol) {
 		this.tsscTimecontrol = tsscTimecontrol;
 	}

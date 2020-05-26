@@ -13,15 +13,15 @@ import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
 public class TopicDelegate implements ITopicDelegate{
 	
 	public final static String SERVER = "http://localhost:8084/";
-	RestTemplate rest;
+	RestTemplate restTemplate;
 	
 	public TopicDelegate() {
-		rest = new RestTemplate();
+		restTemplate = new RestTemplate();
 	}
 	
 	@Override
 	public TsscTopic getTopic(long id) throws Exception{
-		TsscTopic topic = rest.getForObject(SERVER+ "api/topics/" +id, TsscTopic.class);
+		TsscTopic topic = restTemplate.getForObject(SERVER+ "api/topics/" +id, TsscTopic.class);
 		if(topic==null) {
 			throw new Exception("topic is null");
 		}
@@ -30,7 +30,7 @@ public class TopicDelegate implements ITopicDelegate{
 	
 	@Override
 	public Iterable<TsscTopic> getTopics() {
-		TsscTopic[] topics = rest.getForObject(SERVER+ "api/topics/", TsscTopic[].class);
+		TsscTopic[] topics = restTemplate.getForObject(SERVER+ "api/topics/", TsscTopic[].class);
 		List<TsscTopic> at;
 		try {
 			at = Arrays.asList(topics);
@@ -42,8 +42,11 @@ public class TopicDelegate implements ITopicDelegate{
 	}
 	
 	@Override
-	public TsscTopic addTopic(TsscTopic newTopic) {
-		ResponseEntity<TsscTopic> rs = rest.postForEntity(SERVER + "api/topics/", newTopic, TsscTopic.class);
+	public TsscTopic addTopic(TsscTopic tsscTopic) {
+		
+	
+		ResponseEntity<TsscTopic> rs = restTemplate.postForEntity(SERVER + "api/topics/", tsscTopic, TsscTopic.class);
+		
 		
 		TsscTopic topic = rs.getBody();
 		
@@ -52,12 +55,23 @@ public class TopicDelegate implements ITopicDelegate{
 		}
 		return topic;
 	}
+	
+	@Override
+	public void editTopic(TsscTopic editado) {
+		
+		System.out.println("GRUPOS DELEGATE "+ editado.getDefaultGroups());
+		restTemplate.put(SERVER + "api/topics-edit/", editado, TsscTopic.class);
+		
+	}
+	
+	
+	
 	@Override
 	public void deleteTopic(TsscTopic topic) {
 		if (topic == null) {
 			throw new IllegalArgumentException("topic is null");
 		}
-		rest.delete(SERVER + "api/topics/" +topic.getId());
+		restTemplate.delete(SERVER + "api/topics/" +topic.getId());
 		
 	}
 

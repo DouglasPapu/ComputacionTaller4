@@ -3,8 +3,10 @@ package co.edu.icesi.fi.tics.tssc.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,12 +30,12 @@ public class TopicRestController implements ITopicRestController {
 	}
 
 	@PostMapping("/api/topics/")
-	public TsscTopic saveTopic(TsscTopic nuevo) {
+	public TsscTopic saveTopic(@RequestBody TsscTopic tsscTopic) {
 
 		try {
 			
-		    System.out.println("RestController "+nuevo.getName());
-			return topicService.saveTopic(nuevo);
+		    System.out.println("RestController "+tsscTopic.getName());
+			return topicService.saveTopic(tsscTopic);
 
 		} catch (TopicException | CapacityException | SpringException e) {
 
@@ -44,18 +46,18 @@ public class TopicRestController implements ITopicRestController {
 		return null;
 	}
 	
-	@PostMapping("/api/topics/{id}")
-	public TsscTopic editTopic(@PathVariable("id") long id) {
+	@RequestMapping(value = "/api/topics-edit/", method = RequestMethod.PUT)
+	public TsscTopic editTopic(@RequestBody TsscTopic editado) {
 		
 		try {
-			TsscTopic editado = topicService.findById(id).get();
+			//TsscTopic editado = topicService.findById(id).get();
 			return topicService.editTopic(editado);
 		} catch (TopicException | CapacityException | SpringException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return null;
+		return editado;
 	}
 	
 	@GetMapping("/api/topics/")

@@ -338,4 +338,28 @@ public class TsscGame implements Serializable {
 		this.tsscTopic = tsscTopic;
 	}
 	
+	public Integer getnGroups() {
+		return nGroups;
+	}
+
+	public void setnGroups(Integer nGroups) {
+		this.nGroups = nGroups;
+	}
+
+	public Integer getnSprints() {
+		return nSprints;
+	}
+
+	public void setnSprints(Integer nSprints) {
+		this.nSprints = nSprints;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void setTsscTimecontrols(List<TsscTimecontrol> tsscTimecontrols) {
+		this.tsscTimecontrols = tsscTimecontrols;
+	}
+	
 }

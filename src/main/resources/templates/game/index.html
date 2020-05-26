@@ -52,13 +52,13 @@
 									
 							    <td>
 							    
-							    <span th:if=${!game.tsscStories.isEmpty()}>
+							    <span th:if=${game.tsscStories!=null}>
 							     <a th:href="@{/game/list/{id}(id=${game.id})}"
 									class="btn btn-primary" title="Hay historias asociadas"><i class="far fa-file-image"></i></a>
 								
 								</span>
 								
-								<span th:if=${game.tsscStories.isEmpty()}>	
+								<span th:if=${game.tsscStories==null}>	
 								
 								<a 
 									class="btn btn-primary" title="No hay historias asociadas"><i class="far fa-file-image"></i></a>

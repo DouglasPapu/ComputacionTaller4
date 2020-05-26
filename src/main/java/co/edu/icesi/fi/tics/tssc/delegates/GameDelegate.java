@@ -3,6 +3,7 @@ package co.edu.icesi.fi.tics.tssc.delegates;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,8 +39,12 @@ public class GameDelegate implements IGameDelegate{
 		
 	}
 	@Override
-	public TsscGame addGame(TsscGame newGame) {
-		TsscGame game = rest.postForEntity(SERVER + "api/games/", newGame, TsscGame.class).getBody();
+	public TsscGame addGame(TsscGame tsscGame) {
+		
+		System.out.println("SOY EL JUEGO EN DELEGATE" + tsscGame.getName());
+		ResponseEntity<TsscGame> rs = rest.postForEntity(SERVER + "api/games/", tsscGame, TsscGame.class);
+		TsscGame game = rs.getBody();
+		
 		if (game == null) {
 			throw new IllegalArgumentException("Game is null");
 		}

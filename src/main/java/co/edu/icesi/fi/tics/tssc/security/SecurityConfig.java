@@ -26,17 +26,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 			
-		 httpSecurity.formLogin().loginPage("/login").permitAll().and().authorizeRequests()
-        .antMatchers("/index").permitAll()
-        .antMatchers("/api/**").permitAll()
-        .antMatchers("/topics/**").permitAll()
+//		 httpSecurity.formLogin().loginPage("/login").permitAll().and().authorizeRequests()
+//        // .antMatchers("/index").permitAll()
+//        //.antMatchers("/api/**").permitAll().and().authorizeRequests()
+//        .antMatchers("/index", "/api/**", "/topics/**").permitAll().and().authorizeRequests()
+//		.antMatchers("/game/", "/story/", "/game/**", "/story/**").hasAnyRole("admin", "superadmin")
+////		.antMatchers("/game/", "/story/", "/topic/","/game/**", "/story/**", "/topic/**").hasRole("superadmin")
+//		.antMatchers("/topic/**").hasRole("superadmin")
+//		.anyRequest().authenticated().and().httpBasic().and().logout().invalidateHttpSession(true)
+//		.clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//		.logoutSuccessUrl("/login?logout").permitAll().and().exceptionHandling()
+//		.accessDeniedHandler(accessDeniedHandler);
+		
+		httpSecurity.csrf().disable()
+		.authorizeRequests()		
+		.antMatchers("/index", "/api/**", "/topics/**").permitAll().and().authorizeRequests()
 		.antMatchers("/game/", "/story/", "/game/**", "/story/**").hasAnyRole("admin", "superadmin")
-//		.antMatchers("/game/", "/story/", "/topic/","/game/**", "/story/**", "/topic/**").hasRole("superadmin")
-		.antMatchers("/topic/**").hasRole("superadmin")
-		.anyRequest().authenticated().and().httpBasic().and().logout().invalidateHttpSession(true)
-		.clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-		.logoutSuccessUrl("/login?logout").permitAll().and().exceptionHandling()
-		.accessDeniedHandler(accessDeniedHandler);
+		.antMatchers("/api/**").permitAll()
+		.antMatchers("/**").authenticated()
+		.and()		
+		.formLogin().loginPage("/login").permitAll().and()
+		.logout().invalidateHttpSession(true).clearAuthentication(true)
+		.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
+		.permitAll().and().exceptionHandling().accessDeniedHandler(accessDeniedHandler);
 
 	}
 

@@ -73,10 +73,12 @@ public class GameController {
 
 					if (tsscGame.getTsscTopic() == null) {
 
+						
+						//System.out.println("Soy el juego "+ tsscGame.getName());
 						gameDelegate.addGame(tsscGame);
 
 					} else {
-
+						//System.out.println("Soy el juego "+ tsscGame.getName());
 						gameDelegate.addGame(tsscGame);
 					}
 

@@ -9,5 +9,5 @@ public interface ITopicDelegate {
 	public Iterable<TsscTopic> getTopics();
 	public TsscTopic addTopic(TsscTopic newTopic);
 	public void deleteTopic(TsscTopic topic);
-
+	public void editTopic(TsscTopic editado);
 }
