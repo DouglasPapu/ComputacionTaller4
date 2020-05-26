@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.icesi.fi.tics.tssc.model.TsscStory;
-import co.edu.icesi.fi.tics.tssc.services.GameService;
+import co.edu.icesi.fi.tics.tssc.services.IGameDelegate;
 import co.edu.icesi.fi.tics.tssc.services.StoryService;
 
 @RestController
@@ -16,10 +16,10 @@ public class StoryRestController implements IStoryRestController{
 
 	private StoryService storyService;
 
-	private GameService gameService;
+	private IGameDelegate gameService;
 
 	@Autowired
-	public StoryRestController(StoryService storyService, GameService gameService) {
+	public StoryRestController(StoryService storyService, IGameDelegate gameService) {
 		// TODO Auto-generated constructor stub
 		this.gameService = gameService;
 		this.storyService = storyService;

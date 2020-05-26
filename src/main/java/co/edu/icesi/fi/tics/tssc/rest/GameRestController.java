@@ -11,15 +11,15 @@ import co.edu.icesi.fi.tics.tssc.exceptions.CapacityException;
 import co.edu.icesi.fi.tics.tssc.exceptions.GameException;
 import co.edu.icesi.fi.tics.tssc.exceptions.SpringException;
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
-import co.edu.icesi.fi.tics.tssc.services.GameService;
+import co.edu.icesi.fi.tics.tssc.services.IGameDelegate;
 
 @RestController
 public class GameRestController implements IGameRestController{
 
-	private GameService gameService;
+	private IGameDelegate gameService;
 
 	@Autowired
-	public GameRestController(GameService gameService) {
+	public GameRestController(IGameDelegate gameService) {
 		// TODO Auto-generated constructor stub
 		this.gameService = gameService;
 	}

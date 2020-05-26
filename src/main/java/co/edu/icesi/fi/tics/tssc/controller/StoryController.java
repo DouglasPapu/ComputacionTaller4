@@ -17,34 +17,34 @@ import co.edu.icesi.fi.tics.tssc.exceptions.SpringException;
 import co.edu.icesi.fi.tics.tssc.exceptions.TopicException;
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 import co.edu.icesi.fi.tics.tssc.model.TsscStory;
-import co.edu.icesi.fi.tics.tssc.services.GameService;
-import co.edu.icesi.fi.tics.tssc.services.StoryService;
+import co.edu.icesi.fi.tics.tssc.delegates.IGameDelegate;
+import co.edu.icesi.fi.tics.tssc.delegates.IStoryDelegate;
 import co.icesi.fi.tics.tssc.validations.ValidationStory;
 import co.icesi.fi.tics.tssc.validations.ValidationTopic;
 
 @Controller
 public class StoryController {
 
-	private StoryService storyService;
+	private IStoryDelegate storyDelegate;
 
-	private GameService gameService;
+	private IGameDelegate gameDelegate;
 
 	@Autowired
-	public StoryController(StoryService storyService, GameService gameService) {
-		this.storyService = storyService;
-		this.gameService = gameService;
+	public StoryController(IStoryDelegate storyService, IGameDelegate gameService) {
+		this.storyDelegate = storyService;
+		this.gameDelegate = gameService;
 	}
 
 	@GetMapping("/story/")
 	public String indexStory(Model model) {
-		model.addAttribute("stories", storyService.findAll());
+		model.addAttribute("stories", storyDelegate.getStories());
 		return "story/index";
 	}
 
 	@GetMapping("/story/add")
 	public String addStory(Model model) {
 		model.addAttribute("tsscStory", new TsscStory());
-		model.addAttribute("games", gameService.findAll());
+		model.addAttribute("games", gameDelegate.getGames());
 		return "story/add-story";
 	}
 
@@ -59,7 +59,7 @@ public class StoryController {
 				model.addAttribute("businessValue", tsscStory.getBusinessValue());
 				model.addAttribute("initialSprint", tsscStory.getInitialSprint());
 				model.addAttribute("priority", tsscStory.getPriority());
-				model.addAttribute("games", gameService.findAll());
+				model.addAttribute("games", gameDelegate.getGames());
 
 				return "story/add-story";
 			} else {
@@ -67,9 +67,9 @@ public class StoryController {
 				// Guarda una Historia con el juego obligatorio.
 				try {
 					
-					gameService.findById(tsscStory.getTsscGame().getId()).get().getTsscStories().add(tsscStory);
+					gameDelegate.getGame(tsscStory.getTsscGame().getId()).getTsscStories().add(tsscStory);
 									
-					storyService.saveStory(tsscStory, tsscStory.getTsscGame().getId());
+					storyDelegate.addStory(tsscStory);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -79,7 +79,7 @@ public class StoryController {
 			}
 		} else {
 
-			model.addAttribute("stories", storyService.findAll());
+			model.addAttribute("stories", storyDelegate.getStories());
 			return "story/index";
 		}
 
@@ -89,7 +89,13 @@ public class StoryController {
 
 	@GetMapping("/story/edit/{id}")
 	public String showUpdateForm(@PathVariable("id") long id, Model model) {
-		Optional<TsscStory> tsscStory = storyService.findById(id);
+		Optional<TsscStory> tsscStory = null;
+		try {
+			tsscStory = Optional.of(storyDelegate.getStory(id));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		if (tsscStory == null)
 			throw new IllegalArgumentException("Invalid story Id:" + id);
@@ -99,7 +105,7 @@ public class StoryController {
 		model.addAttribute("businessValue", tsscStory.get().getBusinessValue());
 		model.addAttribute("initialSprint", tsscStory.get().getInitialSprint());
 		model.addAttribute("priority", tsscStory.get().getPriority());
-		model.addAttribute("games", gameService.findAll());
+		model.addAttribute("games", gameDelegate.getGames());
 
 		return "story/update-story";
 	}
@@ -116,7 +122,7 @@ public class StoryController {
 
 		if (bindingResult.hasErrors()) {
 
-			model.addAttribute("games", gameService.findAll());
+			model.addAttribute("games", gameDelegate.getGames());
 			model.addAttribute("description", tsscStory.getDescription());
 			model.addAttribute("businessValue", tsscStory.getBusinessValue());
 			model.addAttribute("initialSprint", tsscStory.getInitialSprint());
@@ -128,7 +134,7 @@ public class StoryController {
 		if (action != null && !action.equals("Cancelar")) {
 
 			try {
-				storyService.saveStory(tsscStory, tsscStory.getTsscGame().getId());
+				storyDelegate.addStory(tsscStory);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -141,9 +147,14 @@ public class StoryController {
 
 	@GetMapping("/story/del/{id}")
 	public String deleteGame(@PathVariable("id") long id) {
-		TsscStory tsscStory = storyService.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Invalid story Id:" + id));
-		storyService.delete(tsscStory);
+		TsscStory tsscStory = null;
+		try {
+			tsscStory = storyDelegate.getStory(id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		storyDelegate.deleteStory(tsscStory);
 		return "redirect:/story/";
 	}
 
