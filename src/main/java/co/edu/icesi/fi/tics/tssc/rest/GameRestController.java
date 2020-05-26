@@ -14,7 +14,7 @@ import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 import co.edu.icesi.fi.tics.tssc.services.GameService;
 
 @RestController
-public class GameRestController {
+public class GameRestController implements IGameRestController{
 
 	private GameService gameService;
 

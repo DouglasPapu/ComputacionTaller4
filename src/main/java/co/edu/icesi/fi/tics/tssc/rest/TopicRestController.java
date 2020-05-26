@@ -17,7 +17,7 @@ import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
 import co.edu.icesi.fi.tics.tssc.services.TopicService;
 
 @RestController
-public class TopicRestController {
+public class TopicRestController implements ITopicRestController {
 
 	private TopicService topicService;
 

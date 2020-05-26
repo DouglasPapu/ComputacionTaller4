@@ -12,7 +12,7 @@ import co.edu.icesi.fi.tics.tssc.services.GameService;
 import co.edu.icesi.fi.tics.tssc.services.StoryService;
 
 @RestController
-public class StoryRestController {
+public class StoryRestController implements IStoryRestController{
 
 	private StoryService storyService;
 
