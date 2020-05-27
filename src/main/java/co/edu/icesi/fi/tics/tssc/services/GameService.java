@@ -1,5 +1,6 @@
 package co.edu.icesi.fi.tics.tssc.services;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import co.edu.icesi.fi.tics.tssc.exceptions.CapacityException;
@@ -19,4 +20,5 @@ public interface GameService {
 	public void delete(TsscGame del);
 	//Refactor
 	public TsscGame saveGameWithTopic2(TsscTopic game) throws Exception;
+	public Iterable<TsscGame> findByDate(LocalDate initialDate, LocalDate finalDate);
 }

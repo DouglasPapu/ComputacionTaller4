@@ -70,6 +70,20 @@ public class GameDelegate implements IGameDelegate {
 		restTemplate.delete(SERVER + "api/games/" + game.getId());
 
 	}
+	
+	@Override
+	public Iterable<TsscGame> getScheduledGames() {
+		TsscGame[] games = restTemplate.getForObject(SERVER + "api/games-date/", TsscGame[].class);
+		List<TsscGame> at;
+		try {
+			at = Arrays.asList(games);
+			return at;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	} 
 
 	public RestTemplate getRestTemplate() {
 		return restTemplate;
@@ -78,5 +92,7 @@ public class GameDelegate implements IGameDelegate {
 	public void setRestTemplate(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
+	
+	
 
 }

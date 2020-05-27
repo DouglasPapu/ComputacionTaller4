@@ -9,5 +9,6 @@ public interface IGameDelegate {
 	public TsscGame addGame(TsscGame newGame);
 	public void deleteGame(TsscGame game);
 	public void editGame(TsscGame editado);
+	public Iterable<TsscGame> getScheduledGames();
 
 }
