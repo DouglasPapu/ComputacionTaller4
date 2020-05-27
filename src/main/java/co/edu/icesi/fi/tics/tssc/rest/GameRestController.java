@@ -11,17 +11,17 @@ import co.edu.icesi.fi.tics.tssc.exceptions.CapacityException;
 import co.edu.icesi.fi.tics.tssc.exceptions.GameException;
 import co.edu.icesi.fi.tics.tssc.exceptions.SpringException;
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
-import co.edu.icesi.fi.tics.tssc.services.IGameDelegate;
+import co.edu.icesi.fi.tics.tssc.services.GameService;
 
 @RestController
 public class GameRestController implements IGameRestController{
 
-	private IGameDelegate gameDelegate;
+	private GameService gameService;
 
 	@Autowired
-	public GameRestController(IGameDelegate gameDelegate) {
+	public GameRestController(GameService gameService) {
 		// TODO Auto-generated constructor stub
-		this.gameDelegate = gameDelegate;
+		this.gameService = gameService;
 	}
 
 	@PostMapping("/api/games/")
@@ -33,11 +33,11 @@ public class GameRestController implements IGameRestController{
 		try {
 			if (tsscGame.getTsscTopic() == null) {
 
-				return gameDelegate.saveGame(tsscGame);
+				return gameService.saveGame(tsscGame);
 
 			} else {
 
-				return gameDelegate.saveGameWithTopic(tsscGame, tsscGame.getTsscTopic().getId());
+				return gameService.saveGameWithTopic(tsscGame, tsscGame.getTsscTopic().getId());
 			}
 
 		} catch (GameException | CapacityException | SpringException e) {
@@ -53,7 +53,7 @@ public class GameRestController implements IGameRestController{
 	public TsscGame editGame(@PathVariable("id") long id) {
 
 		try {
-			return gameDelegate.editGame(gameDelegate.findById(id).get());
+			return gameService.editGame(gameService.findById(id).get());
 		} catch (GameException | CapacityException | SpringException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,18 +64,18 @@ public class GameRestController implements IGameRestController{
 
 	@GetMapping("/api/games/")
 	public Iterable<TsscGame> findAll() {
-		return gameDelegate.findAll();
+		return gameService.findAll();
 
 	}
 
 	@GetMapping("/api/games/{id}")
 	public TsscGame findById(@PathVariable("id") long id) {
-		return gameDelegate.findById(id).get();
+		return gameService.findById(id).get();
 	}
 
 	@DeleteMapping("/api/games/{id}")
 	public void deleteGame(@PathVariable("id") long id) {
-		gameDelegate.delete(gameDelegate.findById(id).get());
+		gameService.delete(gameService.findById(id).get());
 	}
 
 }

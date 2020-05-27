@@ -22,7 +22,7 @@ import co.edu.icesi.fi.tics.tssc.repositories.IGameRepository;
 import co.edu.icesi.fi.tics.tssc.repositories.ITopicRepository;
 
 @Service
-public class GameServiceImpl implements IGameDelegate {
+public class GameServiceImpl implements GameService {
 
 	private ITsscGameDAO gameDao;
 
