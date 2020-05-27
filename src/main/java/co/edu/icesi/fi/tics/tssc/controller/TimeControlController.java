@@ -38,6 +38,7 @@ public class TimeControlController {
 	@GetMapping("/timeControl/add")
 	public String addTime(Model model) {
 		model.addAttribute("tsscTimecontrol", new TsscTimecontrol());
+		model.addAttribute("games", gameDelegate.getGames());
 		return "timeControl/add-time";
 	}
 
