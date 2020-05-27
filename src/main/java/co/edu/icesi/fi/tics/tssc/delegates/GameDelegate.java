@@ -8,26 +8,29 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
+import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
 
 @Component
 public class GameDelegate implements IGameDelegate{
 	
 	public final static String SERVER = "http://localhost:8084/";
-	RestTemplate rest;
+	RestTemplate restTemplate;
 	public GameDelegate() {
-		rest = new RestTemplate();
+		restTemplate = new RestTemplate();
 	}
 	@Override
 	public TsscGame getGame(long id) throws Exception {
-		TsscGame game = rest.getForObject(SERVER+ "api/games/" +id, TsscGame.class);
+		TsscGame game = restTemplate.getForObject(SERVER+ "api/games/" +id, TsscGame.class);
 		if(game==null) {
 			throw new Exception("game is null");
 		}
+		
+		System.out.println("ENCONTRE A "+ game.getName());
 		return game;
 	}
 	@Override
 	public Iterable<TsscGame> getGames() {
-		TsscGame[] games = rest.getForObject(SERVER+ "api/games/", TsscGame[].class);
+		TsscGame[] games = restTemplate.getForObject(SERVER+ "api/games/", TsscGame[].class);
 		List<TsscGame> at;
 		try {
 			at = Arrays.asList(games);
@@ -41,8 +44,7 @@ public class GameDelegate implements IGameDelegate{
 	@Override
 	public TsscGame addGame(TsscGame tsscGame) {
 		
-		System.out.println("SOY EL JUEGO EN DELEGATE" + tsscGame.getName());
-		ResponseEntity<TsscGame> rs = rest.postForEntity(SERVER + "api/games/", tsscGame, TsscGame.class);
+		ResponseEntity<TsscGame> rs = restTemplate.postForEntity(SERVER + "api/games/", tsscGame, TsscGame.class);
 		TsscGame game = rs.getBody();
 		
 		if (game == null) {
@@ -50,12 +52,21 @@ public class GameDelegate implements IGameDelegate{
 		}
 		return game;
 	}
+	
+	@Override
+	public void editGame(TsscGame editado) {
+		restTemplate.put(SERVER + "api/games-edit/", editado, TsscGame.class);		
+	}
+	
+	
+	
+	
 	@Override
 	public void deleteGame(TsscGame game) {
 		if (game == null) {
 			throw new IllegalArgumentException("Game is null");
 		}
-		rest.delete(SERVER + "api/games/" +game.getId());
+		restTemplate.delete(SERVER + "api/games/" +game.getId());
 		
 		
 	}

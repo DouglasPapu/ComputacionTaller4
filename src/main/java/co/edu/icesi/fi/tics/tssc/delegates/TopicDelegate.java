@@ -58,8 +58,7 @@ public class TopicDelegate implements ITopicDelegate{
 	
 	@Override
 	public void editTopic(TsscTopic editado) {
-		
-		System.out.println("GRUPOS DELEGATE "+ editado.getDefaultGroups());
+
 		restTemplate.put(SERVER + "api/topics-edit/", editado, TsscTopic.class);
 		
 	}

@@ -10,5 +10,6 @@ public interface IStoryDelegate {
 	public Iterable<TsscStory> getStories();
 	public TsscStory addStory(TsscStory newStory);
 	public void deleteStory(TsscStory story);
+	public void editStory(TsscStory editado);
 
 }

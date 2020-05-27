@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.icesi.fi.tics.tssc.model.TsscStory;
@@ -26,7 +28,7 @@ public class StoryRestController implements IStoryRestController{
 	}
 
 	@PostMapping("/api/stories/")
-	public TsscStory saveStory(TsscStory nuevo) {
+	public TsscStory saveStory(@RequestBody TsscStory nuevo) {
 
 		try {
 			gameService.findById(nuevo.getTsscGame().getId()).get().getTsscStories().add(nuevo);
@@ -39,18 +41,15 @@ public class StoryRestController implements IStoryRestController{
 		return null;
 	}
 
-	@PostMapping("/api/stories/{id}")
-	public TsscStory editStory(@PathVariable("id") long id) {
-
-		TsscStory edited = storyService.findById(id).get();
+	@PutMapping("/api/stories-edit/")
+	public TsscStory editStory(@RequestBody TsscStory editado) {
 
 		try {
-			return storyService.editStory(edited);
+			return storyService.editStory(editado);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		return null;
 
 	}
@@ -60,7 +59,7 @@ public class StoryRestController implements IStoryRestController{
 		return storyService.findAll();		
 	}
 	
-	@GetMapping("/stories/{id}")
+	@GetMapping("/api/stories/{id}")
 	public TsscStory  findById(@PathVariable("id") long id) {
 		return storyService.findById(id).get();
 	}

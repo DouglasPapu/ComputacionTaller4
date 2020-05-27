@@ -155,11 +155,11 @@ public class GameController {
 			try {
 				if (tsscGame.getTsscTopic() == null) {
 
-					gameDelegate.addGame(tsscGame);
+					gameDelegate.editGame(tsscGame);
 
 				} else {
 
-					gameDelegate.addGame(tsscGame);
+					gameDelegate.editGame(tsscGame);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

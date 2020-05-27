@@ -8,5 +8,6 @@ public interface IGameDelegate {
 	public Iterable<TsscGame> getGames();
 	public TsscGame addGame(TsscGame newGame);
 	public void deleteGame(TsscGame game);
+	public void editGame(TsscGame editado);
 
 }

@@ -65,6 +65,7 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
+	@Transactional
 	public TsscStory editStory(TsscStory editado) throws StoryException {
 		if (editado == null) {
 			throw new StoryException();
@@ -72,7 +73,7 @@ public class StoryServiceImpl implements StoryService {
 			throw new StoryException();
 		} else {
 
-			storyDao.save(editado);
+			storyDao.update(editado);
 			return editado;
 
 		}

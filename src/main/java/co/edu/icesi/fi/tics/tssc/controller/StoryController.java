@@ -1,5 +1,6 @@
 package co.edu.icesi.fi.tics.tssc.controller;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,9 +68,10 @@ public class StoryController {
 				// Guarda una Historia con el juego obligatorio.
 				try {
 					
-					gameDelegate.getGame(tsscStory.getTsscGame().getId()).getTsscStories().add(tsscStory);
-									
-					storyDelegate.addStory(tsscStory);
+						
+						gameDelegate.getGame(tsscStory.getTsscGame().getId()).getTsscStories().add(tsscStory);
+            			storyDelegate.addStory(tsscStory);
+					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -134,7 +136,7 @@ public class StoryController {
 		if (action != null && !action.equals("Cancelar")) {
 
 			try {
-				storyDelegate.addStory(tsscStory);
+				storyDelegate.editStory(tsscStory);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

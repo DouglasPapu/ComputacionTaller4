@@ -19,6 +19,7 @@ import co.icesi.fi.tics.tssc.validations.ValidationStory;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -114,6 +115,7 @@ public class TsscGame implements Serializable {
 	private TsscTopic tsscTopic;
 
 	public TsscGame() {
+		tsscStories = new ArrayList<TsscStory>();
 	}
 
 	public long getId() {

@@ -6,20 +6,21 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 import co.edu.icesi.fi.tics.tssc.model.TsscStory;
 
 @Component
 public class StoryDelegate implements IStoryDelegate{
 	
 	public final static String SERVER = "http://localhost:8084/";
-	RestTemplate rest;
+	RestTemplate restTemplate;
 	public StoryDelegate() {
-		rest = new RestTemplate();
+		restTemplate = new RestTemplate();
 	}
 	@Override
 	public TsscStory getStory(long id) throws Exception{
 		// TODO Auto-generated method stub
-		TsscStory story = rest.getForObject(SERVER+ "api/stories/" +id, TsscStory.class);
+		TsscStory story = restTemplate.getForObject(SERVER+ "api/stories/" +id, TsscStory.class);
 		if(story==null) {
 			throw new Exception("Story is null");
 		}
@@ -27,7 +28,7 @@ public class StoryDelegate implements IStoryDelegate{
 	}
 	@Override
 	public Iterable<TsscStory> getStories() {
-		TsscStory[] stories = rest.getForObject(SERVER+ "api/stories/", TsscStory[].class);
+		TsscStory[] stories = restTemplate.getForObject(SERVER+ "api/stories/", TsscStory[].class);
 		List<TsscStory> at;
 		try {
 			at = Arrays.asList(stories);
@@ -39,18 +40,26 @@ public class StoryDelegate implements IStoryDelegate{
 	}
 	@Override
 	public TsscStory addStory(TsscStory newStory) {
-		TsscStory story = rest.postForEntity(SERVER + "api/stories/", newStory, TsscStory.class).getBody();
+		TsscStory story = restTemplate.postForEntity(SERVER + "api/stories/", newStory, TsscStory.class).getBody();
 		if (story == null) {
 			throw new IllegalArgumentException("story is null");
 		}
 		return story;
 	}
+	
+	@Override
+	public void editStory(TsscStory editado) {
+		restTemplate.put(SERVER + "api/stories-edit/", editado, TsscStory.class);		
+	}
+	
+	
+	
 	@Override
 	public void deleteStory(TsscStory story) {
 		if (story == null) {
 			throw new IllegalArgumentException("story is null");
 		}
-		rest.delete(SERVER + "api/stories/" +story.getId());
+		restTemplate.delete(SERVER + "api/stories/" +story.getId());
 		
 	}
 

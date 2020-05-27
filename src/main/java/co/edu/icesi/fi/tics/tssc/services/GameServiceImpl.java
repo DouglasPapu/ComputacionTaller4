@@ -85,7 +85,7 @@ public class GameServiceImpl implements GameService {
 		} else if (editado.getNSprints() <= 0) {
 			throw new SpringException();
 		} else {
-			 gameDao.save(editado);
+			 gameDao.update(editado);
 			return editado;
 		}
 
