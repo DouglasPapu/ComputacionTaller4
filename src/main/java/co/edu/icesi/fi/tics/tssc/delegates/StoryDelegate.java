@@ -62,5 +62,13 @@ public class StoryDelegate implements IStoryDelegate{
 		restTemplate.delete(SERVER + "api/stories/" +story.getId());
 		
 	}
+	public RestTemplate getRestTemplate() {
+		return restTemplate;
+	}
+	public void setRestTemplate(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+	}
 
+	
+	
 }
