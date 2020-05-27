@@ -1,5 +1,7 @@
 package co.edu.icesi.fi.tics.tssc.rest;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,5 +79,13 @@ public class GameRestController implements IGameRestController{
 	public void deleteGame(@PathVariable("id") long id) {
 		gameService.delete(gameService.findById(id).get());
 	}
+	
+	
+	@GetMapping("/api/games-date/{initial}/{final}")
+	public Iterable<TsscGame> findByDate(@PathVariable("initial") LocalDate initialDate,@PathVariable("final") LocalDate finalDate) {
+		return gameService.findByDate(initialDate, finalDate);
+
+	}
+
 
 }

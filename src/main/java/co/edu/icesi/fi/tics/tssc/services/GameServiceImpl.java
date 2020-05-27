@@ -1,5 +1,6 @@
 package co.edu.icesi.fi.tics.tssc.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -142,6 +143,11 @@ public class GameServiceImpl implements GameService {
 	public Optional<TsscGame> findById(long id) {
 		Optional<TsscGame> op = Optional.of(gameDao.findById(id).get(0));
 		return op;
+	}
+	
+	@Override
+	public Iterable<TsscGame> findByDate(LocalDate initialDate, LocalDate finalDate) {
+		return gameDao.findByDate(initialDate, finalDate);
 	}
 
 	@Override
