@@ -34,7 +34,7 @@ public class TopicRestController implements ITopicRestController {
 
 		try {
 			
-		    System.out.println("RestController "+tsscTopic.getName());
+		   // System.out.println("RestController "+tsscTopic.getName());
 			return topicService.saveTopic(tsscTopic);
 
 		} catch (TopicException | CapacityException | SpringException e) {
