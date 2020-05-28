@@ -63,6 +63,7 @@ public class TimeControlController {
 
 			} else {
 
+				System.out.println("SOY EL GAME" + tsscTimecontrol.getTsscGame().getName());
 				delegate.addTime(tsscTimecontrol);
 
 				return "redirect:/timeControl/";
@@ -75,7 +76,7 @@ public class TimeControlController {
 		}
 	}
 	
-	@GetMapping("timeControl/edit/{id}")
+	@GetMapping("/timeControl/edit/{id}")
 	public String showUpdateForm(@PathVariable("id") long id, Model model) {
 		Optional<TsscTimecontrol> tsscTimecontrol = null;
 		

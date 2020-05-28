@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import co.edu.icesi.fi.tics.tssc.dao.ITsscGameDAO;
 import co.edu.icesi.fi.tics.tssc.dao.ITsscTimecontrolDAO;
 import co.edu.icesi.fi.tics.tssc.model.TsscTimecontrol;
 
@@ -15,11 +16,14 @@ public class TimeControlServiceImpl implements TimeControlService{
 	
 	private ITsscTimecontrolDAO timeDao;
 	
+	private ITsscGameDAO gameDao;
+	
 	@Autowired
-	public TimeControlServiceImpl(ITsscTimecontrolDAO timeDao) {
+	public TimeControlServiceImpl(ITsscTimecontrolDAO timeDao, ITsscGameDAO gameDao) {
 		// TODO Auto-generated constructor stub
 		
 		this.timeDao = timeDao;
+		this.gameDao = gameDao;
 	}
 	
 
@@ -60,6 +64,16 @@ public class TimeControlServiceImpl implements TimeControlService{
 	@Transactional
 	public void delete(TsscTimecontrol del) {
 		timeDao.delete(del);
+	}
+
+
+	@Override
+	@Transactional
+	public TsscTimecontrol saveTimecontrolWithGame(TsscTimecontrol nuevo, long id) {
+		// TODO Auto-generated method stub		
+		nuevo.setTsscGame(gameDao.findById(id).get(0));
+		timeDao.save(nuevo);
+		return nuevo;
 	}
 
 	

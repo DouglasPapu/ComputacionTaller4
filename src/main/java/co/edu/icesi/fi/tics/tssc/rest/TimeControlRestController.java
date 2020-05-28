@@ -26,8 +26,19 @@ public class TimeControlRestController implements ITimeControlRestController{
 	@Override
 	@PostMapping("/api/timeControl/")
 	public TsscTimecontrol saveTime(@RequestBody TsscTimecontrol nuevo) {
-		// TODO Auto-generated method stub		
-		return timeService.saveTimecontrol(nuevo);
+		// TODO Auto-generated method stub
+		
+		if(nuevo.getTsscGame() == null) {
+			
+			return timeService.saveTimecontrol(nuevo);
+			
+		}else {
+			
+			return timeService.saveTimecontrolWithGame(nuevo, nuevo.getTsscGame().getId());
+			
+		}
+		
+		
 	}
 
 	@Override

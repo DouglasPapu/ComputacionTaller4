@@ -7,6 +7,7 @@ import co.edu.icesi.fi.tics.tssc.model.TsscTimecontrol;
 public interface TimeControlService {
 
 	public TsscTimecontrol saveTimecontrol(TsscTimecontrol nuevo);
+	public TsscTimecontrol saveTimecontrolWithGame(TsscTimecontrol nuevo, long id);
 	public TsscTimecontrol editTimecontrol(TsscTimecontrol editado);
 	public Iterable<TsscTimecontrol> findAll();
 	public Optional<TsscTimecontrol> findById(long id);
