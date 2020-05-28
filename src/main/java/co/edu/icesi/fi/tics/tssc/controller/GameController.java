@@ -1,10 +1,12 @@
 package co.edu.icesi.fi.tics.tssc.controller;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -202,6 +204,22 @@ public class GameController {
 		model.addAttribute("stories", tsscGame.get().getTsscStories());
 
 		return "game/list-stories";
+	}
+	
+	@GetMapping("/game/filterinput")
+	public String pageScheduledGames() {
+		
+		return "game/games-date";
+	}
+	
+	@PostMapping("/game/filterlist")
+	public String showScheduledGames(@RequestParam("initial")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate initialDate,@RequestParam("final") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate finalDate, Model model) {
+		System.out.println("hola");
+		System.out.println(initialDate+"");
+		Iterable<TsscGame> filter = gameDelegate.getScheduledGames(initialDate,finalDate);
+		model.addAttribute("games",filter);
+		
+		return "game/games-date2";
 	}
 	
 	

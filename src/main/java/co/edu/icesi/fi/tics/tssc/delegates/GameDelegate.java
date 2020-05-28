@@ -1,5 +1,6 @@
 package co.edu.icesi.fi.tics.tssc.delegates;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -72,8 +73,8 @@ public class GameDelegate implements IGameDelegate {
 	}
 	
 	@Override
-	public Iterable<TsscGame> getScheduledGames() {
-		TsscGame[] games = restTemplate.getForObject(SERVER + "api/games-date/", TsscGame[].class);
+	public Iterable<TsscGame> getScheduledGames(LocalDate initial, LocalDate finald) {
+		TsscGame[] games = restTemplate.getForObject(SERVER + "api/games-date/" +initial+"/"+finald, TsscGame[].class);
 		List<TsscGame> at;
 		try {
 			at = Arrays.asList(games);

@@ -1,5 +1,7 @@
 package co.edu.icesi.fi.tics.tssc.delegates;
 
+import java.time.LocalDate;
+
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 
 public interface IGameDelegate {
@@ -9,6 +11,6 @@ public interface IGameDelegate {
 	public TsscGame addGame(TsscGame newGame);
 	public void deleteGame(TsscGame game);
 	public void editGame(TsscGame editado);
-	public Iterable<TsscGame> getScheduledGames();
+	public Iterable<TsscGame> getScheduledGames(LocalDate initial, LocalDate finald);
 
 }

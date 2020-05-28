@@ -3,6 +3,7 @@ package co.edu.icesi.fi.tics.tssc.rest;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -82,7 +83,7 @@ public class GameRestController implements IGameRestController{
 	
 	
 	@GetMapping("/api/games-date/{initial}/{final}")
-	public Iterable<TsscGame> findByDate(@PathVariable("initial") LocalDate initialDate,@PathVariable("final") LocalDate finalDate) {
+	public Iterable<TsscGame> findByDate(@PathVariable("initial") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate initialDate,@PathVariable("final") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate finalDate) {
 		return gameService.findByDate(initialDate, finalDate);
 
 	}
