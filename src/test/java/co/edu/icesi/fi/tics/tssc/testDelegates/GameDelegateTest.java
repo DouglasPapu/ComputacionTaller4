@@ -9,12 +9,18 @@ import java.time.LocalTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import co.edu.icesi.fi.tics.tssc.delegates.GameDelegate;
+import co.edu.icesi.fi.tics.tssc.model.TsscGame;
+import co.edu.icesi.fi.tics.tssc.model.TsscStory;
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
@@ -27,19 +33,18 @@ class GameDelegateTest {
 	@Mock
 	private RestTemplate restTemplate;
 
+	@InjectMocks
 	private GameDelegate gameDelegate;
 
 	@BeforeEach
 	public void init() {
-
-		gameDelegate = new GameDelegate();
-		restTemplate = new RestTemplate();
-		gameDelegate.setRestTemplate(restTemplate);
+		MockitoAnnotations.initMocks(this);
 
 	}
 
 	@Test
 	public void testAddGame() {
+		MockitoAnnotations.initMocks(this);
 		TsscGame game1 = new TsscGame();
 		game1.setName("Juego 1");
 		game1.setNGroups(10);
@@ -47,14 +52,15 @@ class GameDelegateTest {
 		game1.setScheduledTime(LocalTime.now());
 		game1.setScheduledDate(LocalDate.now());
 
-		Mockito.when(restTemplate.postForEntity(URI + "api/games/", game1, TsscGame.class).getBody()).thenReturn(game1);
+		Mockito.when(restTemplate.postForEntity(URI + "api/games/", game1, TsscGame.class))
+		.thenReturn(new ResponseEntity<TsscGame>(game1, HttpStatus.ACCEPTED));
 
 		assertEquals(gameDelegate.addGame(game1), game1);
 	}
 
 	@Test
 	public void testGetGames() {
-
+		MockitoAnnotations.initMocks(this);
 		TsscGame game1 = new TsscGame();
 		game1.setName("Juego 1");
 		game1.setNGroups(10);
@@ -74,20 +80,32 @@ class GameDelegateTest {
 		lista[0] = game1;
 		lista[1] = game2;
 
-		restTemplate.postForEntity(URI + "api/games/", game1, TsscGame.class).getBody();
+		Mockito.when(restTemplate.postForEntity(URI + "api/games/", game1, TsscGame.class))
+		.thenReturn(new ResponseEntity<TsscGame>(game1, HttpStatus.ACCEPTED));
 		gameDelegate.addGame(game1);
 
-		restTemplate.postForEntity(URI + "api/games/", game2, TsscGame.class).getBody();
+		Mockito.when(restTemplate.postForEntity(URI + "api/games/", game2, TsscGame.class))
+		.thenReturn(new ResponseEntity<TsscGame>(game2, HttpStatus.ACCEPTED));
 		gameDelegate.addGame(game2);
 
-		Mockito.when(restTemplate.getForObject(URI + "api/games/", TsscGame[].class)).thenReturn(lista);
+		Mockito.when(restTemplate.getForObject(URI + "api/games/", TsscGame[].class))
+		.thenReturn(new ResponseEntity<TsscGame[]>(lista, HttpStatus.ACCEPTED).getBody());
 
-		assertEquals(gameDelegate.getGames(), lista);
+		Iterable<TsscGame> lista2 = gameDelegate.getGames();
+		
+		int contador = 0;
+		for (TsscGame tsscGame : lista2) {
+			
+			assertEquals(tsscGame.getName(), lista[contador].getName());
+			contador++;
+			
+		}
 
 	}
 	
 	@Test
 	public void testGetGame() {
+		MockitoAnnotations.initMocks(this);
 		TsscGame game1 = new TsscGame();
 		game1.setId(1);
 		game1.setName("Juego 1");
@@ -97,18 +115,86 @@ class GameDelegateTest {
 		game1.setScheduledDate(LocalDate.now());
 		
 		
-		restTemplate.postForEntity(URI + "api/games/", game1, TsscGame.class).getBody();
+		Mockito.when(restTemplate.postForEntity(URI + "api/games/", game1, TsscGame.class))
+		.thenReturn(new ResponseEntity<TsscGame>(game1, HttpStatus.ACCEPTED));
 		gameDelegate.addGame(game1);
 		
-		
-		Mockito.when(restTemplate.getForObject(URI+"api/games/1", TsscGame.class)).thenReturn(game1);
+		Mockito.when(restTemplate.getForObject(URI+"api/games/1", TsscGame.class))
+		.thenReturn(new ResponseEntity<TsscGame>(game1,HttpStatus.OK).getBody());
 		try {
-			assertEquals(gameDelegate.getGame(1), game1);
+			assertEquals(gameDelegate.getGame(1).getName(), game1.getName());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail();
 		}
 		
 	}
+	
+	@Test
+	public void borrarTest() {
+		
+		MockitoAnnotations.initMocks(this);
+		TsscGame game1 = new TsscGame();
+		game1.setId(1);
+		game1.setName("Juego 1");
+		game1.setNGroups(10);
+		game1.setNSprints(2);
+		game1.setScheduledTime(LocalTime.now());
+		game1.setScheduledDate(LocalDate.now());
+		
+		
+		Mockito.when(restTemplate.postForEntity(URI + "api/games/", game1, TsscGame.class))
+		.thenReturn(new ResponseEntity<TsscGame>(game1, HttpStatus.ACCEPTED));
+		gameDelegate.addGame(game1);
+		
+		Mockito.doNothing().when(restTemplate).delete(URI+"api/games/1");
+		gameDelegate.deleteGame(game1);
+		
+		Mockito.when(restTemplate.getForObject(URI + "api/games/1", null))
+		.thenReturn(new ResponseEntity(null, HttpStatus.OK).getBody());
+		
+		try {
+			assertNull(gameDelegate.getGame(1));
+		} catch (Exception e) {
+		}
+	}
+	
+	
+	@Test
+	public void editTest() {
+		MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.initMocks(this);
+		TsscGame game1 = new TsscGame();
+		game1.setId(1);
+		game1.setName("Juego 1");
+		game1.setNGroups(10);
+		game1.setNSprints(2);
+		game1.setScheduledTime(LocalTime.now());
+		game1.setScheduledDate(LocalDate.now());
+		
+		
+		Mockito.when(restTemplate.postForEntity(URI + "api/games/", game1, TsscGame.class))
+		.thenReturn(new ResponseEntity<TsscGame>(game1, HttpStatus.ACCEPTED));
+		gameDelegate.addGame(game1);
+		
+		game1.setName("Game Editado");
+		
+		Mockito.when(restTemplate.patchForObject(URI + "api/games/", game1, TsscGame.class))
+		.thenReturn(new ResponseEntity<TsscGame>(game1, HttpStatus.ACCEPTED).getBody());
+		
+		gameDelegate.editGame(game1);
+		
+		Mockito.when(restTemplate.getForObject(URI + "api/games/1", TsscGame.class))
+		.thenReturn(new ResponseEntity<TsscGame>(game1, HttpStatus.OK).getBody());
+		
+		try {
+			assertEquals(gameDelegate.getGame(1).getName(), game1.getName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			fail();
+		}
+		
+	}
+	
 
 }
