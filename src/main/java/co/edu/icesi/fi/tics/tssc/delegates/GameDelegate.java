@@ -85,6 +85,21 @@ public class GameDelegate implements IGameDelegate {
 		}
 
 	} 
+	
+	@Override
+	public Iterable<TsscTopic> getTopicsByGameDate(LocalDate date) {
+		TsscTopic[] topics = restTemplate.getForObject(SERVER + "api/topics-date/" +date,TsscTopic[].class);
+		
+		List<TsscTopic> at;
+		try {
+			at = Arrays.asList(topics);
+			return at;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	} 
 
 	public RestTemplate getRestTemplate() {
 		return restTemplate;

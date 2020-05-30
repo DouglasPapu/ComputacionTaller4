@@ -21,4 +21,5 @@ public interface GameService {
 	//Refactor
 	public TsscGame saveGameWithTopic2(TsscTopic game) throws Exception;
 	public Iterable<TsscGame> findByDate(LocalDate initialDate, LocalDate finalDate);
+	public Iterable<Object[]> findTopicByGameDate(LocalDate date);
 }

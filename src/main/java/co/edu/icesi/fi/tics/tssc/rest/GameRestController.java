@@ -87,6 +87,12 @@ public class GameRestController implements IGameRestController{
 		return gameService.findByDate(initialDate, finalDate);
 
 	}
+	
+	@GetMapping("/api/topics-date/{date}")
+	public Iterable<Object[]> findTopicByGameDate(@PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+		return gameService.findTopicByGameDate(date);
+
+	}
 
 
 }
