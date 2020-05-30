@@ -1,10 +1,12 @@
 package co.edu.icesi.fi.tics.tssc.controller;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,10 +16,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import co.edu.icesi.fi.tics.tssc.delegates.IGameDelegate;
 import co.edu.icesi.fi.tics.tssc.delegates.ITopicDelegate;
 import co.edu.icesi.fi.tics.tssc.exceptions.CapacityException;
 import co.edu.icesi.fi.tics.tssc.exceptions.SpringException;
 import co.edu.icesi.fi.tics.tssc.exceptions.TopicException;
+import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
 import co.edu.icesi.fi.tics.tssc.services.TopicService;
 import co.icesi.fi.tics.tssc.validations.ValidationTopic;
@@ -26,10 +30,13 @@ import co.icesi.fi.tics.tssc.validations.ValidationTopic;
 public class TopicController {
 
 	private ITopicDelegate delegate;
+	
+	private IGameDelegate gameDelegate;
 
 	@Autowired
-	public TopicController(ITopicDelegate delegate) {
+	public TopicController(ITopicDelegate delegate,IGameDelegate gameDelegate) {
 		this.delegate = delegate;
+		this.gameDelegate = gameDelegate;
 	}
 
 	@GetMapping("/topic/")
@@ -149,6 +156,22 @@ public class TopicController {
 		}
 		delegate.deleteTopic(tsscTopic);
 		return "redirect:/topic/";
+	}
+	
+	@GetMapping("/topic/filterinput")
+	public String pageScheduledGames() {
+		
+		return "game/games-date";
+	}
+	
+	@PostMapping("/topic/filterlist")
+	public String showScheduledGames(@RequestParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, Model model) {
+		System.out.println("hola");
+		System.out.println(date+"");
+		Iterable<TsscTopic> filter = gameDelegate.getTopicsByGameDate(date);
+		model.addAttribute("games",filter);
+		
+		return "game/games-date2";
 	}
 
 }

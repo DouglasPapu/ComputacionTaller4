@@ -149,6 +149,11 @@ public class GameServiceImpl implements GameService {
 	public Iterable<TsscGame> findByDate(LocalDate initialDate, LocalDate finalDate) {
 		return gameDao.findByDate(initialDate, finalDate);
 	}
+	
+	@Override
+	public Iterable<Object[]> findTopicByGameDate(LocalDate date) {
+		return gameDao.findTopicByScheduledGames(date);
+	}
 
 	@Override
 	@Transactional

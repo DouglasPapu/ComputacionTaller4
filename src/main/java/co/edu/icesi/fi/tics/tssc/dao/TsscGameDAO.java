@@ -76,14 +76,8 @@ public class TsscGameDAO implements ITsscGameDAO {
 	@Override
 	public List<Object[]> findTopicByScheduledGames(LocalDate scheduledDate) {
 
-//		String q = "Select a, Count(s) FROM TsscTopic a JOIN TsscGame s ON a.id = s.tsscTopic.id ("
-//				+ " WHERE s.scheduledDate = :date)"
-//				+ " ORDER BY s.scheduledTime ASC";
-//		String q = "Select a, Count(s) FROM TsscTopic a JOIN TsscGame s ON a.id = s.tsscTopic.id ("
-//		+ " AND s.scheduledDate = :date)"
-//		+ " group by a.tsscTopic ORDER BY s.scheduledTime ASC";
-		
-	String q = "Select s.tsscTopic, count(s) from TsscGame s where :date = s.scheduledDate group by s.tsscTopic ORDER BY s.scheduledTime ASC ";
+
+	String q = "SELECT t,count(g) FROM TsscTopic t RIGHT JOIN TsscGame g ON t.id = g.tsscTopic.id WHERE g.scheduledDate = :date GROUP BY(t)";
 		
 		TypedQuery<Object[]> query = entityManager.createQuery(q, Object[].class).setParameter("date", scheduledDate);
 
