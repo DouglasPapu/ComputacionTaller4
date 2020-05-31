@@ -161,7 +161,7 @@ public class TopicController {
 	@GetMapping("/topic/filterinput")
 	public String pageScheduledGames() {
 		
-		return "game/games-date";
+		return "topic/topics-date";
 	}
 	
 	@PostMapping("/topic/filterlist")
@@ -169,9 +169,12 @@ public class TopicController {
 		System.out.println("hola");
 		System.out.println(date+"");
 		Iterable<TsscTopic> filter = gameDelegate.getTopicsByGameDate(date);
-		model.addAttribute("games",filter);
+		Iterable<Integer> games = gameDelegate.getNumberOfGamesByTopic(date);
 		
-		return "game/games-date2";
+		model.addAttribute("topics",filter);
+		model.addAttribute("games",games.iterator());
+		
+		return "topic/topics-date2";
 	}
 
 }
