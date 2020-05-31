@@ -14,5 +14,6 @@ public interface IGameDelegate {
 	public void editGame(TsscGame editado);
 	public Iterable<TsscGame> getScheduledGames(LocalDate initial, LocalDate finald);
 	public Iterable<TsscTopic> getTopicsByGameDate(LocalDate date);
+	public Iterable<Integer> getNumberOfGamesByTopic(LocalDate date);
 
 }
