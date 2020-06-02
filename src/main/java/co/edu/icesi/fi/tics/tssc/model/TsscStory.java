@@ -6,6 +6,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import co.icesi.fi.tics.tssc.validations.ValidationStory;
 
 import java.math.BigDecimal;
@@ -57,14 +59,16 @@ public class TsscStory implements Serializable {
 
 	// bi-directional many-to-one association to TsscAcceptanceCriteria
 	@OneToMany(mappedBy = "tsscStory")
+	@JsonIgnore
 	private List<TsscAcceptanceCriteria> tsscAcceptanceCriterias;
 
 	// bi-directional many-to-one association to TsscDeliverable
 	@OneToMany(mappedBy = "tsscStory")
+	@JsonIgnore
 	private List<TsscDeliverable> tsscDeliverables;
 
 	// bi-directional many-to-one association to TsscGame
-	@NotNull(message = "Debes elegir un juego obligatoriamente", groups=ValidationStory.class)
+	//@NotNull(message = "Debes elegir un juego obligatoriamente", groups=ValidationStory.class)
 	@ManyToOne
 	@JoinColumn(name = "TSSC_GAME_ID")
 	private TsscGame tsscGame;
@@ -72,12 +76,14 @@ public class TsscStory implements Serializable {
 	//bi-directional many-to-one association to TsscTopic
 	@ManyToOne
 	@JoinColumn(name="TSSC_TOPIC_ID")
+	@JsonIgnore
 	private TsscTopic tsscTopic;
 
 
 	// bi-directional many-to-one association to TsscState
 	@ManyToOne
 	@JoinColumn(name = "TSSC_STATE_ID")
+	@JsonIgnore
 	private TsscState tsscState;
 
 	public TsscStory() {

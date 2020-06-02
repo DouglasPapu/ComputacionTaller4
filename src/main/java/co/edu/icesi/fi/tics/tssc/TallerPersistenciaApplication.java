@@ -17,6 +17,7 @@ import co.edu.icesi.fi.tics.tssc.model.TsscTimecontrol;
 import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
 import co.edu.icesi.fi.tics.tssc.services.AdminService;
 import co.edu.icesi.fi.tics.tssc.services.GameService;
+import co.edu.icesi.fi.tics.tssc.services.StoryService;
 import co.edu.icesi.fi.tics.tssc.services.TopicService;
 
 @SpringBootApplication
@@ -33,7 +34,7 @@ public class TallerPersistenciaApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demo(AdminService adminService, TopicService topicService, GameService gameService) {
+	public CommandLineRunner demo(AdminService adminService, TopicService topicService, GameService gameService, StoryService storyService) {
 		return (args) -> {
 
 			// Agregar un usuario superadmin.
@@ -55,7 +56,7 @@ public class TallerPersistenciaApplication {
 			topic1.setDefaultGroups(8);
 			topic1.setDefaultSprints(8);
 			topic1.setName("Hola");
-			topic1.setName("Ilian");
+			topic1.setName("Tema 1");
 			topicService.saveTopic(topic1);
 			long one =1;
 			TsscGame game1 = new TsscGame();
@@ -74,7 +75,7 @@ public class TallerPersistenciaApplication {
 			TsscGame game2 = new TsscGame();
 			game2.setAdminPassword("da");
 			game2.setGuestPassword("da");
-			game2.setName("Juego 1");
+			game2.setName("Juego 2");
 			game2.setnGroups(1);
 			game2.setnSprints(1);
 			game2.setPauseSeconds(one);

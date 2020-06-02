@@ -20,9 +20,11 @@ import co.edu.icesi.fi.tics.tssc.exceptions.CapacityException;
 import co.edu.icesi.fi.tics.tssc.exceptions.SpringException;
 import co.edu.icesi.fi.tics.tssc.exceptions.TopicException;
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
+import co.edu.icesi.fi.tics.tssc.model.TsscStory;
 import co.edu.icesi.fi.tics.tssc.delegates.IGameDelegate;
 import co.edu.icesi.fi.tics.tssc.delegates.ITopicDelegate;
 import co.icesi.fi.tics.tssc.validations.ValidationGame;
+import co.icesi.fi.tics.tssc.validations.ValidationStory;
 import co.icesi.fi.tics.tssc.validations.ValidationTopic;
 
 @Controller
@@ -31,6 +33,8 @@ public class GameController {
 	private IGameDelegate gameDelegate;
 
 	private ITopicDelegate topicDelegate;
+	
+	
 
 	@Autowired
 	public GameController(IGameDelegate gameService, ITopicDelegate topicDelegate) {
@@ -223,6 +227,81 @@ public class GameController {
 	}
 	
 	
+	@GetMapping("/game/{id}/stories")
+	public String getStoriesByGame(@PathVariable("id") long id, Model model) {
+		model.addAttribute("stories",gameDelegate.getStoriesByGame(id));
+		try {
+			model.addAttribute("game",gameDelegate.getGame(id));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "game/list-stories";
+	}
+	
+	@GetMapping("/game/{id}/stories/add")
+	public String addStory(@PathVariable("id") long id, Model model) {
+		model.addAttribute("tsscStory", new TsscStory());
+		try {
+			model.addAttribute("game", gameDelegate.getGame(id).getId());
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "game/add-story";
+	}
+	@PostMapping("/game/{id}/stories/add")
+	public String saveStoryByGame(@Validated(ValidationStory.class) TsscStory tsscStory, BindingResult bindingResult,
+			@RequestParam(value = "action", required = true) String action, @PathVariable("id") long id,Model model) {
+		
+		if (!action.equals("Cancelar")) {
+			if (bindingResult.hasErrors()) {
+				
+					
+				System.out.println("entre aqui");
+				model.addAttribute("description", tsscStory.getDescription());
+				model.addAttribute("businessValue", tsscStory.getBusinessValue());
+				model.addAttribute("initialSprint", tsscStory.getInitialSprint());
+				model.addAttribute("priority", tsscStory.getPriority());
+				
+
+				return "game/add-story";
+			} else {
+
+				// Guarda una Historia con el juego obligatorio.
+				try {
+					
+            			gameDelegate.addStoryByGame(id, tsscStory);
+            			//System.out.println("id story "+story.getId());
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				model.addAttribute("stories", gameDelegate.getStoriesByGame(id));
+				try {
+					model.addAttribute("game",gameDelegate.getGame(id));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return "redirect:/game/{id}/stories";
+			}
+		} else {
+
+			model.addAttribute("stories", gameDelegate.getStoriesByGame(id));
+			try {
+				model.addAttribute("game",gameDelegate.getGame(id));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return "game/list-stories";
+		}
+
+	}
 	
 	
 }

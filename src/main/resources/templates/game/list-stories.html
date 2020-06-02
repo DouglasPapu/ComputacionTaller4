@@ -51,10 +51,12 @@
 						</tbody>
 					</table>
 				</div>
-				
+				<p class="my-5">
+					<a th:href="@{/game/{id}/stories/add(id=${game.id})}" class="btn btn-primary">Adicionar Historia<i class="fas fa-dice"></i></a>
+				</p>
 			</div>
 		</div>
-		<a th:href="@{/game/}"> Regresar a <i class="fas fa-home ml-2"></i></a>
+		<a th:href="@{/game/}"> Regresar a juegos <i class="fas fa-home ml-2"></i></a>
 	</div>
 </body>
 </html>

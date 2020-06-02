@@ -63,6 +63,35 @@ public class StoryServiceImpl implements StoryService {
 		    return nuevo;
 		}
 	}
+	
+	@Override
+	@Transactional
+	public TsscStory saveStoryByGame(TsscStory nuevo, long id)
+			throws StoryException, GameException, BusinessValueException, InitialSprintException, PriorityException {
+		// TODO Auto-generated method stub
+		if (nuevo == null) {
+			throw new StoryException();
+		} else if (gameDao.findById(id).isEmpty()) {
+			throw new GameException();
+
+		} else if (nuevo.getBusinessValue().compareTo(new BigDecimal(0)) == 0
+				|| nuevo.getBusinessValue().compareTo(new BigDecimal(0)) == -1) {
+			throw new BusinessValueException();
+
+		} else if (nuevo.getInitialSprint().compareTo(new BigDecimal(0)) == 0
+				|| nuevo.getInitialSprint().compareTo(new BigDecimal(0)) == -1) {
+			throw new InitialSprintException();
+
+		} else if (nuevo.getPriority().compareTo(new BigDecimal(0)) == 0
+				|| nuevo.getPriority().compareTo(new BigDecimal(0)) == -1) {
+			throw new PriorityException();
+
+		} else {
+			nuevo.setTsscGame(gameDao.findById(id).get(0));
+		    storyDao.update(nuevo);
+		    return nuevo;
+		}
+	}
 
 	@Override
 	@Transactional
