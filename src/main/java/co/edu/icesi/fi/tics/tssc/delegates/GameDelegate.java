@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
+import co.edu.icesi.fi.tics.tssc.model.TsscStory;
 import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
 
 @Component
@@ -97,29 +98,26 @@ public class GameDelegate implements IGameDelegate {
 		Object[] topics= restTemplate.getForObject(SERVER + "api/topics-date/" +date,Object[].class);
 		
 		List<TsscTopic> all = new ArrayList<TsscTopic>();
-		
-		System.out.println("restTemplate "+topics.length);
-		//TsscTopic topic2 =(TsscTopic)topics[0];
-		//System.out.println("restTemplate "+topic2.getName());
+
 		List<Object> at;
 		at = Arrays.asList(topics);
 		ArrayList object=null;
 		for(int i=0;i<at.size();i++) {
 			object=(ArrayList)at.get(i);
 			LinkedHashMap<Object,Object> test1 = (LinkedHashMap<Object, Object>) object.get(0);
-			System.out.println(test1);
+			
 			int value=0;
 			for( Map.Entry<Object,Object>  entry : test1.entrySet()){
 				if(entry.getKey().toString().equals("id")) {
-					System.out.println("value "+entry.getValue().toString());
+					
 					value= Integer.parseInt(entry.getValue().toString());
 				}
 				   
 				   
 			}
-			System.out.println(value);
+			
 			TsscTopic topic = restTemplate.getForObject(SERVER+ "api/topics/" +value, TsscTopic.class);
-			System.out.println(topic.getName());
+			
 			all.add(topic);
 			
 		}
@@ -145,6 +143,34 @@ public class GameDelegate implements IGameDelegate {
 		}
 		
 		return all;
+
+	} 
+	
+	@Override
+	public TsscStory addStoryByGame(long id,TsscStory tsscStory) {
+		System.out.println("delegate "+tsscStory.getDescription());
+		ResponseEntity<TsscStory> rs = restTemplate.postForEntity(SERVER + "api/games/"+id+"/stories/add", tsscStory, TsscStory.class);
+		TsscStory story = rs.getBody();
+		System.out.println("delegate "+story.getDescription());
+		
+
+		if (story == null) {
+			throw new IllegalArgumentException("Story is null");
+		}
+		return story;
+	}
+	
+	@Override
+	public Iterable<TsscStory> getStoriesByGame(long id) {
+		TsscStory[] stories = restTemplate.getForObject(SERVER + "api/games/"+id+"/stories", TsscStory[].class);
+		List<TsscStory> at;
+		try {
+			at = Arrays.asList(stories);
+			return at;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	} 
 

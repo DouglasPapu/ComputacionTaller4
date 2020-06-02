@@ -3,6 +3,7 @@ package co.edu.icesi.fi.tics.tssc.delegates;
 import java.time.LocalDate;
 
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
+import co.edu.icesi.fi.tics.tssc.model.TsscStory;
 import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
 
 public interface IGameDelegate {
@@ -15,5 +16,7 @@ public interface IGameDelegate {
 	public Iterable<TsscGame> getScheduledGames(LocalDate initial, LocalDate finald);
 	public Iterable<TsscTopic> getTopicsByGameDate(LocalDate date);
 	public Iterable<Integer> getNumberOfGamesByTopic(LocalDate date);
+	public TsscStory addStoryByGame(long id, TsscStory tsscStory);
+	public Iterable<TsscStory> getStoriesByGame(long id);
 
 }

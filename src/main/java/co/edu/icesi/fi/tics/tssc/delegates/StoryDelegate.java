@@ -3,11 +3,13 @@ package co.edu.icesi.fi.tics.tssc.delegates;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 import co.edu.icesi.fi.tics.tssc.model.TsscStory;
+import co.edu.icesi.fi.tics.tssc.model.TsscTopic;
 
 @Component
 public class StoryDelegate implements IStoryDelegate{
@@ -40,7 +42,8 @@ public class StoryDelegate implements IStoryDelegate{
 	}
 	@Override
 	public TsscStory addStory(TsscStory newStory) {
-		TsscStory story = restTemplate.postForEntity(SERVER + "api/stories/", newStory, TsscStory.class).getBody();
+		ResponseEntity<TsscStory> rs = restTemplate.postForEntity(SERVER + "api/stories/", newStory, TsscStory.class);
+		TsscStory story = rs.getBody();
 		if (story == null) {
 			throw new IllegalArgumentException("story is null");
 		}

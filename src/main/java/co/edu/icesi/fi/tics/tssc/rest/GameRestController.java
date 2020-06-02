@@ -16,17 +16,22 @@ import co.edu.icesi.fi.tics.tssc.exceptions.CapacityException;
 import co.edu.icesi.fi.tics.tssc.exceptions.GameException;
 import co.edu.icesi.fi.tics.tssc.exceptions.SpringException;
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
+import co.edu.icesi.fi.tics.tssc.model.TsscStory;
 import co.edu.icesi.fi.tics.tssc.services.GameService;
+import co.edu.icesi.fi.tics.tssc.services.StoryService;
 
 @RestController
 public class GameRestController implements IGameRestController{
 
 	private GameService gameService;
+	private StoryService storyService;
 
 	@Autowired
-	public GameRestController(GameService gameService) {
+	public GameRestController(GameService gameService,StoryService storyService) {
 		// TODO Auto-generated constructor stub
 		this.gameService = gameService;
+		this.storyService=storyService;
+		
 	}
 
 	@PostMapping("/api/games/")
@@ -91,6 +96,31 @@ public class GameRestController implements IGameRestController{
 	@GetMapping("/api/topics-date/{date}")
 	public Iterable<Object[]> findTopicByGameDate(@PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 		return gameService.findTopicByGameDate(date);
+
+	}
+	
+	@PostMapping("/api/games/{id}/stories/add")
+	public TsscStory addStoryToGame(@PathVariable("id") long id, @RequestBody TsscStory tsscStory) {
+		//TsscGame game =gameService.findById(id).get();
+		
+	
+		try {
+			return storyService.saveStoryByGame(tsscStory, id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+
+	}
+	
+	@GetMapping("/api/games/{id}/stories")
+	public Iterable<TsscStory> findAllStoriesByGame(@PathVariable("id") long id) {
+		
+		TsscGame game =gameService.findById(id).get();
+		
+		return game.getTsscStories();
 
 	}
 
