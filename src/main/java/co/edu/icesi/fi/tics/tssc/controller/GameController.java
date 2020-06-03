@@ -315,5 +315,66 @@ public class GameController {
 
 	}
 	
+	//Edit Story 
+	
+	
+	@GetMapping("/game/story/edit/{id}")
+	public String showUpdateForm2(@PathVariable("id") long id, Model model) {
+		Optional<TsscStory> tsscStory = null;
+		try {
+			tsscStory = Optional.of(storyDelegate.getStory(id));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (tsscStory == null)
+			throw new IllegalArgumentException("Invalid story Id:" + id);
+
+		model.addAttribute("tsscStory", tsscStory.get());
+		model.addAttribute("description", tsscStory.get().getDescription());
+		model.addAttribute("businessValue", tsscStory.get().getBusinessValue());
+		model.addAttribute("initialSprint", tsscStory.get().getInitialSprint());
+		model.addAttribute("priority", tsscStory.get().getPriority());
+		model.addAttribute("games", gameDelegate.getGames());
+
+		return "game/update-story";
+	}
+
+	@PostMapping("/game/story/edit/{id}")
+	public String updateStory(@PathVariable("id") long id,
+			@RequestParam(value = "action", required = true) String action,
+			@Validated(ValidationStory.class) TsscStory tsscStory, BindingResult bindingResult, Model model) {
+
+		if (action.equals("Cancelar")) {
+
+			return "redirect:/game/";
+		}
+
+		if (bindingResult.hasErrors()) {
+
+			model.addAttribute("games", gameDelegate.getGames());
+			model.addAttribute("description", tsscStory.getDescription());
+			model.addAttribute("businessValue", tsscStory.getBusinessValue());
+			model.addAttribute("initialSprint", tsscStory.getInitialSprint());
+			model.addAttribute("priority", tsscStory.getPriority());
+			
+			return "game/update-story";
+		}
+
+		if (action != null && !action.equals("Cancelar")) {
+
+			try {
+				storyDelegate.editStory(tsscStory);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		return "redirect:/game/";
+	}
+	
 	
 }
