@@ -68,7 +68,7 @@ public class TsscStory implements Serializable {
 	private List<TsscDeliverable> tsscDeliverables;
 
 	// bi-directional many-to-one association to TsscGame
-	//@NotNull(message = "Debes elegir un juego obligatoriamente", groups=ValidationStory.class)
+	@NotNull(message = "Debes elegir un juego obligatoriamente", groups=ValidationStory.class)
 	@ManyToOne
 	@JoinColumn(name = "TSSC_GAME_ID")
 	private TsscGame tsscGame;

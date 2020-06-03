@@ -22,6 +22,7 @@ import co.edu.icesi.fi.tics.tssc.exceptions.TopicException;
 import co.edu.icesi.fi.tics.tssc.model.TsscGame;
 import co.edu.icesi.fi.tics.tssc.model.TsscStory;
 import co.edu.icesi.fi.tics.tssc.delegates.IGameDelegate;
+import co.edu.icesi.fi.tics.tssc.delegates.IStoryDelegate;
 import co.edu.icesi.fi.tics.tssc.delegates.ITopicDelegate;
 import co.icesi.fi.tics.tssc.validations.ValidationGame;
 import co.icesi.fi.tics.tssc.validations.ValidationStory;
@@ -34,12 +35,14 @@ public class GameController {
 
 	private ITopicDelegate topicDelegate;
 	
+	private IStoryDelegate storyDelegate;
 	
 
 	@Autowired
-	public GameController(IGameDelegate gameService, ITopicDelegate topicDelegate) {
+	public GameController(IGameDelegate gameService, ITopicDelegate topicDelegate, IStoryDelegate storyDelegate) {
 		this.gameDelegate = gameService;
 		this.topicDelegate = topicDelegate;
+		this.storyDelegate = storyDelegate;
 	}
 
 	@GetMapping("/game/")
@@ -231,7 +234,7 @@ public class GameController {
 	public String getStoriesByGame(@PathVariable("id") long id, Model model) {
 		model.addAttribute("stories",gameDelegate.getStoriesByGame(id));
 		try {
-			model.addAttribute("game",gameDelegate.getGame(id));
+			model.addAttribute("game",gameDelegate.getGame(id).getId());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -242,9 +245,13 @@ public class GameController {
 	
 	@GetMapping("/game/{id}/stories/add")
 	public String addStory(@PathVariable("id") long id, Model model) {
-		model.addAttribute("tsscStory", new TsscStory());
+		
 		try {
+			TsscStory pc = new TsscStory();
+			pc.setTsscGame(gameDelegate.getGame(id));
+			model.addAttribute("tsscStory", pc);
 			model.addAttribute("game", gameDelegate.getGame(id).getId());
+			
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -255,44 +262,49 @@ public class GameController {
 	@PostMapping("/game/{id}/stories/add")
 	public String saveStoryByGame(@Validated(ValidationStory.class) TsscStory tsscStory, BindingResult bindingResult,
 			@RequestParam(value = "action", required = true) String action, @PathVariable("id") long id,Model model) {
+				
 		
 		if (!action.equals("Cancelar")) {
 			if (bindingResult.hasErrors()) {
 				
 					
-				System.out.println("entre aqui");
+				//System.out.println("entre aqui");
 				model.addAttribute("description", tsscStory.getDescription());
 				model.addAttribute("businessValue", tsscStory.getBusinessValue());
 				model.addAttribute("initialSprint", tsscStory.getInitialSprint());
 				model.addAttribute("priority", tsscStory.getPriority());
 				
-
 				return "game/add-story";
 			} else {
 
 				// Guarda una Historia con el juego obligatorio.
 				try {
 					
-            			gameDelegate.addStoryByGame(id, tsscStory);
+            			 gameDelegate.addStoryByGame(id, tsscStory);
+					    //tsscStory.setTsscGame(gameDelegate.getGame(id)); 
+            			//gameDelegate.getGame(id).getTsscStories().add(tsscStory);
+            			//System.out.println(gameDelegate.getGame(id).getTsscStories().get(0).getDescription());
+            			//storyDelegate.addStory(tsscStory);
             			//System.out.println("id story "+story.getId());
 					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				model.addAttribute("stories", gameDelegate.getStoriesByGame(id));
-				try {
-					model.addAttribute("game",gameDelegate.getGame(id));
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				model.addAttribute("stories", gameDelegate.getStoriesByGame(id));
+//				try {
+//					model.addAttribute("game",gameDelegate.getGame(id));
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				return "redirect:/game/{id}/stories";
 			}
 		} else {
 
-			model.addAttribute("stories", gameDelegate.getStoriesByGame(id));
 			try {
+				
+				model.addAttribute("stories", gameDelegate.getStoriesByGame(id));
 				model.addAttribute("game",gameDelegate.getGame(id));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

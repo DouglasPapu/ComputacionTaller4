@@ -149,9 +149,9 @@ public class GameDelegate implements IGameDelegate {
 	@Override
 	public TsscStory addStoryByGame(long id,TsscStory tsscStory) {
 		System.out.println("delegate "+tsscStory.getDescription());
-		ResponseEntity<TsscStory> rs = restTemplate.postForEntity(SERVER + "api/games/"+id+"/stories/add", tsscStory, TsscStory.class);
+		ResponseEntity<TsscStory> rs = restTemplate.postForEntity(SERVER + "api/games/"+id+"/stories/add/", tsscStory, TsscStory.class);
 		TsscStory story = rs.getBody();
-		System.out.println("delegate "+story.getDescription());
+		//System.out.println("delegate "+story.getDescription());
 		
 
 		if (story == null) {

@@ -59,6 +59,7 @@ public class StoryServiceImpl implements StoryService {
 
 		} else {
 			nuevo.setTsscGame(gameDao.findById(id).get(0));
+			System.out.println("ESTOY EN EL SERVICIO " + nuevo.getDescription() + " sid Juego "+ id);
 		    storyDao.save(nuevo);
 		    return nuevo;
 		}
@@ -87,8 +88,12 @@ public class StoryServiceImpl implements StoryService {
 			throw new PriorityException();
 
 		} else {
+			System.out.println("ESTOY EN EL SERVICIO " + nuevo.getDescription() + "id Juego "+ id);
 			nuevo.setTsscGame(gameDao.findById(id).get(0));
+			//gameDao.findById(id).get(0).getTsscStories().add(nuevo);
+			System.out.println("SOY LOS JUEGOS DE HISTORIA " + gameDao.findById(id).get(0).getName());
 		    storyDao.update(nuevo);
+		    
 		    return nuevo;
 		}
 	}

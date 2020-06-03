@@ -20,6 +20,8 @@ public class TsscStoryDAO implements ITsscStoryDAO {
 
 	@Override
 	public void save(TsscStory story) {
+		System.out.println("ESTOY EN DAO STORY" + story.getDescription());
+		System.out.println("SOY EL JUEGO DE STORY DAO: "+story.getTsscGame().getName());
 		entityManager.persist(story);
 		
 	}

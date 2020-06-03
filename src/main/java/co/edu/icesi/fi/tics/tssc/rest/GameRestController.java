@@ -99,13 +99,14 @@ public class GameRestController implements IGameRestController{
 
 	}
 	
-	@PostMapping("/api/games/{id}/stories/add")
+	@PostMapping("/api/games/{id}/stories/add/")
 	public TsscStory addStoryToGame(@PathVariable("id") long id, @RequestBody TsscStory tsscStory) {
 		//TsscGame game =gameService.findById(id).get();
-		
+		System.out.println("ESTOY EN EL REST CONTROLLER" + tsscStory.getDescription());
 	
 		try {
 			return storyService.saveStoryByGame(tsscStory, id);
+			//return storyService.editStory(tsscStory);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

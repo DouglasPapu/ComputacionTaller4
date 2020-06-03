@@ -19,6 +19,7 @@
 				<form action="#" th:object="${tsscStory}" th:action="@{/game/{id}/stories/add(id=${game})}"
 					method="post">
 					<div class="row">
+					
 
 
 						<div class="form-group col-md-6">
@@ -60,9 +61,10 @@
 
 						<div class="col-md-4 mt-3">
 
-							<input type="hidden" class="btn btn-primary" value="">
+							<input type="hidden" th:field="*{tsscGame}" id="tsscGame" value="">
 
 						</div>
+						
 
 
 						<div class="col-md-4 mt-3">
